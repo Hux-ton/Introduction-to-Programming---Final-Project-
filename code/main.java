@@ -1,13 +1,14 @@
+import java.util.Scanner;
+import java.util.Random;
+import data.*;
+import utils.*;
 public class main{
 
-    public void map(){
-        int location[][];
-        location {1,1};
+    public static void main(String[] args) {
 
-    }
-    public void main(){
+        Player PlayerOne = new Player();
+        PlayerOne.setHP(10);
         
-                    
     }
 
 }
