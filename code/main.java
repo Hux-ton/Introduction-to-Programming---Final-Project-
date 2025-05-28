@@ -4,9 +4,10 @@ public class main{
         int location[][];
         location {1,1};
 
-
-
     }
-    public void main(strings Ar)
+    public void main(){
+        
+                    
+    }
 
 }
