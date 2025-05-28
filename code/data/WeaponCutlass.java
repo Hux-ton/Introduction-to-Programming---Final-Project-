@@ -1,6 +1,7 @@
-public class Weapons_Cutlass extends Weapons{
+package data;
+public class WeaponCutlass extends Weapon{
 
-    public Weapons_Cutlass(){
+    public WeaponCutlass(){
 
         name = "Cutlass";
         verb ="slashed";
