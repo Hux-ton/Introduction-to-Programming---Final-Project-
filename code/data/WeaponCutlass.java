@@ -1,4 +1,5 @@
 package data;
+
 public class WeaponCutlass extends Weapon{
 
     public WeaponCutlass(){

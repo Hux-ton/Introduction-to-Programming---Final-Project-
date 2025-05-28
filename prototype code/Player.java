@@ -1,5 +1,5 @@
-
 import java.util.ArrayList;
+import data.*;
 
 public class Player {
 
@@ -50,6 +50,7 @@ public class Player {
         return printInv;
     }
 
-    public Weapons currentWeapons;
+    public Weapon currentWeapon;
+    
 
 }

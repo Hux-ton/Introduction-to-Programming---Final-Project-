@@ -55,6 +55,6 @@ public class Player {
         return printInv;
     }
 
-    public Weapon currentWeapons;
-
+    public Weapon currentWeapon;
+    
 }

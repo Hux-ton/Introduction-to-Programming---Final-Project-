@@ -101,7 +101,7 @@ public class TestDriver {
         
             //Creating an enemy object using the player class
             Player Pirate = new Player();
-            Pirate.currentWeapons = new Weapons_Axe();
+            Pirate.currentWeapon = new Weapon_Axe();
             Pirate.setHP(50);
             Pirate.setPlayerName("Blackbeard");
         

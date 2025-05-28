@@ -4,7 +4,7 @@ public class WeaponFlintlock extends Weapon{
 
     public WeaponFlintlock(){
 
-        name = "Rusted Flinlock Pistol";
+        name = "Rusted Flintlock Pistol";
         verb ="shot";
         damageMax = 20;
         damageMin = 10;
