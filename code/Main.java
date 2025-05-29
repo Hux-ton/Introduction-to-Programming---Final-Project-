@@ -5,8 +5,10 @@ import utils.*;
 public class Main{
     //initializing the variables we will use throughout the code
     public  static boolean gameRunning =  false;
-    private static Player playerOne;
+    public static Player playerOne;
     private static Scanner myInput;
+    private static Map cove;
+    public static String locations[][];
 
     //
     private static void gameStart(){
@@ -64,16 +66,21 @@ public class Main{
         //set game to now be running and start main loop
         gameRunning = true;
         
+        
     }
 
     public static void main(String[] args){
 
 
         gameStart();
-        playerOne.getHP();
+    
         while (gameRunning) { 
                 
             System.out.println("Games on");
+            MapManager mapManager = new MapManager(playerOne);
+           
+            
+
             break;
             
         }

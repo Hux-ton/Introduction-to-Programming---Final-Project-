@@ -2,12 +2,12 @@ package utils;
 
 import data.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
     //initalizing our 
     private String playerName;
     private int HP;
-    private ArrayList<String> inventory = new ArrayList<>();
     
     //adds the restored hp ammount to the player object's HP
     public void restoreHP(int he){
@@ -39,22 +39,64 @@ public class Player {
 
     }
 
-    public void inventoryAdd(String item){
-
-        inventory.add(item);
-    }
-    public boolean hasItem(boolean item){
-        
-        return inventory.contains(item);
-    }
-    public String returnInventory(){
-        String printInv = null;
-        for (String item : inventory) {
-            printInv = printInv +" | " + item ;
-        }
-        return printInv;
-    }
-
     public Weapon currentWeapon;
+
+    private int x = 0;
+    private int y = 0;
+    private List<Item> inventory = new ArrayList<>();
+
+    public Player() {
+        this.x = 0;
+        this.y = 0;
+    }
+
+    public int getX() {
+        return x;
+    }
+    public void setX(int x) {
+        this.x = x;
+    }
+    public int getY() {
+        return y;
+    }
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public boolean hasItem(String name) {
+        for (Item i : inventory) {
+            if (i.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addItem(Item item) {
+        inventory.add(item);
+        System.out.println("You got the: " + item.getName());
+    }
+
+    public void removeItem(String name) {
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).getName().equalsIgnoreCase(name)) {
+                inventory.remove(i);
+                System.out.println(name +"removed" );
+                break;
+            }
+        }
+    }
+
+    public void showInventory() {
+        if (inventory.isEmpty()) {
+            System.out.println("Nothing");
+        } else {
+            System.out.print("You have:");
+            for (Item i : inventory) {
+                System.out.print(i.getName() + " ");
+            }
+            System.out.println();
+        }
+    }
     
 }
