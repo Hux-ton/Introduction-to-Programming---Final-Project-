@@ -72,6 +72,10 @@ public class Player{
         return false;
     }
 
+    public boolean invEmpty(){
+        return inventory.isEmpty();
+    }
+
     public void addItem(Item item) {
         inventory.add(item);
         System.out.println("You got the: " + item.getName());
@@ -85,6 +89,10 @@ public class Player{
                 break;
             }
         }
+    }
+
+    public Boolean containsItem(Item item){
+        return inventory.contains(item);
     }
 
     public void showInventory() {

@@ -2,14 +2,14 @@ import data.*;
 import java.util.Scanner;
 import utils.*;
 
-public class Main{
+public class Main{ 
     //initializing the variables we will use throughout the code
     public  static boolean gameRunning =  false;
     public static Player playerOne;
     private static Scanner myInput;
 
 
-    //
+    //Game initalization with intro script and character creation
     private static void gameStart(){
 
         myInput = new Scanner(System.in);
@@ -62,6 +62,8 @@ public class Main{
         }
         System.out.println("=================== Now your journey begins! ===================");
 
+        playerOne.setX(0);
+        playerOne.setY(0);
         //set game to now be running and start main loop
         gameRunning = true;
         
@@ -69,16 +71,17 @@ public class Main{
     }
 
     public static void main(String[] args){
-
+        //calling the game start method to begin
         gameStart();
-    
+
+        //while the boolean is true the game will keep going unless it ends by quitting or losing all your hp
         while (gameRunning) { 
                 
             System.out.println("Games on");
+            Map.initalizeMaps();
             MapManager mapManager = new MapManager(playerOne);
             mapManager.start();
             
-
             break;
             
         }

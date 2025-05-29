@@ -1,8 +1,7 @@
 package utils;
 
-import java.util.Scanner;
 import data.*;
-import utils.*;
+import java.util.Scanner;
 public class MapManager {
     private Player player;
     private Scanner scanner;
@@ -13,7 +12,7 @@ public class MapManager {
     }
 
     public void start() {
-        System.out.println("Enter (n/w/e/s) for move,(Talk) with the old man, (Inv) for check inventory,(Quit) for close the game。");
+        System.out.println("Enter [N/S/E/W] for movement, [Talk] for interacting with a NPC, [Inv] for checking contents of inventory, or [Quit] for closing the game.");
         while (true) {
             System.out.print("Order: ");
             String cmd = scanner.nextLine().trim().toLowerCase();
@@ -23,26 +22,45 @@ public class MapManager {
             } else if (cmd.equals("talk")) {
                 handleTalk();
             } else if (cmd.equals("inv")) {
-                player.showInventory();
+                handleInv();
             } else if (cmd.length() == 1 && "wens".contains(cmd)) {
                 handleMove(cmd);
             } else {
-                System.out.println("Invalid order, please enter w/e/n/s, talk, inv, quit。");
+                System.out.println("Invalid order, please enter N/S/E/W, talk, inv, quit.");
             }
         }
         System.out.println("Game Exited");
     }
 
-    private void handleTalk() {//Get the boat form old man.
-        if (player.getX() == 0 && player.getY() == 0) {
-            if (!player.hasItem("Boat")) {
-                player.addItem(new Item("Boat"));
-                System.out.println("Old man: Let's go further with this boat!");
-            } else {
-                System.out.println("Old man: I have nothing left for you.");
+    private void handleTalk() {
+        //Get the shovel form old man.
+        if (player.getX() == 0 && player.getY() == 2) {
+            if (!player.hasItem("Shovel")) {
+                player.addItem(new Item("Shovel"));
+                System.out.println("""
+                                   ========================= Old Mariner =========================\r
+                                   Blimey, she\u2019s gonna make me walk the plank fer this. Wait, can \r
+                                   ye help me find me amulet. I\u2019ll give ye me trusty shovel. I lost \r
+                                   me amulet somewhere on dis here coastline, when I went fer a \r
+                                   walk. If ya can find me amulet, I\u2019ll let ye use me ship.\r
+                                   \r
+                                   You take the Shovel from the Old Mariner.\r
+                                   ================================================================""");
+            } else if (player.hasItem("Shovel")&&!player.hasItem("Amulet")){
+                System.out.println("""
+                                   ========================= Old Mariner =========================\r
+                                   Aye matey. Do ye have mi amulet? Hark ye fool! I learned ye, I's \r
+                                   lost it on the coastline already. Fetch it for me and I'll let\r
+                                   yer captain me ship.\r
+                                   ================================================================""" //
+                //
+                //
+                //
+                );
             }
         } else {
-            System.out.println("No one in here");
+            System.out.println("Looks like there isn't anyone to talk talk to here.\nJust you and your thoughts..");
+
         }
     }
 
@@ -50,30 +68,70 @@ public class MapManager {
         int newX = player.getX();
         int newY = player.getY();
 
-        if (dir.equals("w")) newX--;
-        else if (dir.equals("e")) newX++;
-        else if (dir.equals("n")) newY++;
-        else if (dir.equals("s")) newY--;
-
+        switch (dir) {
+            case "w":
+                newX--;
+                break;
+            case "e":
+                newX++;
+                break;
+            case "n":
+                newY++;
+                break;
+            case "s":
+                newY--;
+                break;
+            default:
+                break;
+        }
         //Preventing out-of-map range
         if (newX < 0 || newX >= Map.X || newY < 0 || newY >= Map.Y) {
-            System.out.println("Cannot exceed the map ");
+            System.out.println("""
+                               The mystical fog bounces you back strangely denying you access to\r
+                               this area.""" //
+            );
             return;
         }
 
-        // Detect whether the player has a boat, otherwise cannot enter the ocean
+        //Detect whether the player has a boat, otherwise cannot enter the ocean
         if (Map.needsBoat(newX, newY) && !player.hasItem("Boat")) {
-            System.out.println("you need a boat from old man");
+            if (player.getY()==0){
+                System.out.println("""
+                                   You step out You step out into the surf letting the waves lap at your toes.\r
+                                   It looks rough out there, you're going to need a boat.""");
+            } else if(newX == 3 && newY == 3){
+                System.out.println("""
+                                   You bang on the cave wall but you can't pass through. Maybe try\r
+                                   another direction.""");
+            }
             return;
         }
 
-        //The boat hit a reef, return to the birth point
-        if (newX == 2 && newY == 0) {
-            System.out.println("Your ship is sunk. . . .");
-            newX = 0;
-            newY = 0;
+        //(2,4) Entering cave + boat removal and spyglass check
+        if (newX == 2 && newY == 4){
+            if (player.containsItem(new Item("SpyGlass"))) {
+                
+            }
+            player.removeItem("Boat");
+            return;
+
         }
 
+        //Detect whether the player has a boat, otherwise cannot enter the cave
+        if (Map.needsSpyGlass(newX, newY) && player.hasItem("Boat")){
+            if (newX == 2 && newY == 3) {
+                return;
+            }else if (newY==3){
+                System.out.println("""
+                                   If you travel any further in this direction you will crash your \r
+                                   ship into the rocky cliff. Try another way""" //
+                );
+            }
+            return;
+
+        }
+
+        
         // (1,4)Communicate with pirate ships and merchant ships
         if (newX == 1 && newY == 4) {
             System.out.println("You encountered two ships:1) Pirate Ship  2) Merchant Ship");
@@ -99,15 +157,93 @@ public class MapManager {
             }
         }
 
-        if (newX == 3 && newY == 2 && !player.hasItem("Key")) {//Check if you have a key
-            System.out.println("This is a stone gate, You need a key to enter");
-            return;
-        }
+
 
         //Calculating the player's position
         player.setX(newX);
         player.setY(newY);
         System.out.println("Now position: (" + newX + "," + newY + ") " + Map.getName(newX, newY));
-        //System.out.println(Map.getDescs(newX, newY));
+        System.out.println(Map.getDescs(newX, newY));
+    }
+    private void handleInv(){
+
+        player.showInventory();
+        if (!player.invEmpty()){
+            String choice = "";
+            while (true){ 
+                System.out.println("What Item would you like to use: ");
+                choice = scanner.nextLine();
+                if (choice.contains("shovel")||choice.contains("shovel")){
+                    break;
+                }
+            }
+            switch(choice.toLowerCase()){
+
+                case "shovel":
+                    if (player.getX() == 0 && player.getY() == 2){
+
+                        System.out.println("""
+                                       As you take out your shovel, you hear a guard in the distance \r
+                                       scream \u201cNO DIGGING\u201d.""" //
+                        );
+
+                    } else if (player.getX() == 0 && player.getY() == 1) {
+
+                        System.out.println("You dig and dig, nothing but sand.");
+                
+                    } else if (player.getX() == 0 && player.getY() == 0){
+
+                        System.out.println("""
+                                       As you puncture the sand and lift the first pile away with your \r
+                                       shovel, you notice a gold amulet glistening in the sun.  \r
+                                       \r
+                                       The Amulet has been added to your inventory.""");
+                        player.addItem(new Item("Amulet"));
+
+                    } else {
+                        System.out.println("""
+                                       you bring out the shovel raising it into the air to strike the\r
+                                       ground beneath you. But you lose the confidence.""");
+                    }
+                    return;
+
+                case "amulet":
+                    System.out.println("""
+                                   You look at the shiny necklace in your hands. It's giant gemstone\r
+                                   gleams in a ray of light. You ca see why the Old Mariner wanted\r
+                                   to get it back.""");
+
+                    break;
+
+                case "diving gear":
+                    System.out.println("""
+                                   A heavy lead helmet attached to a thin tube below on top of the\r
+                                   head. The weight should help you sink to find treasure.""" //
+            );
+                    break;
+
+                case "tankard":
+                    System.out.println("""
+                                   A silver dented and scratched mug that probably used by it's\r
+                                   last owner to serve his grog.""" //
+            );
+                    break;
+
+                case "spyglass":
+                    System.out.println("""
+                                   You put your eye up to the spyglass and look out over the sea.\r
+                                   As if with a mind of its own, it seems to want to linger its \r
+                                   sights upon the cave to the east.""" //
+            //
+            );
+                    break;
+                case "used spyglass":
+                    System.out.println("the spyglass is now broken");
+                    break;
+            }
+            System.out.println("You put away your " + choice);
+        }
+
+
     }
 }
