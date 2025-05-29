@@ -2,6 +2,7 @@ package utils;
 
 import java.util.Scanner;
 import data.*;
+import utils.*;
 public class MapManager {
     private Player player;
     private Scanner scanner;
@@ -107,6 +108,6 @@ public class MapManager {
         player.setX(newX);
         player.setY(newY);
         System.out.println("Now position: (" + newX + "," + newY + ") " + Map.getName(newX, newY));
-        System.out.println(Map.getDescs(newX, newY));
+        //System.out.println(Map.getDescs(newX, newY));
     }
 }

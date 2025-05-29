@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class TestDriver {
 
     //Method to create a chnace for us to miss an attack, accuracy can be changed depending on weapon stats
-    public static void damage(Player AttackingPlayer, Player DefendingPlayer){
+    public static void damage(oldPlayer AttackingPlayer, oldPlayer DefendingPlayer){
             Boolean didMiss = Miss(AttackingPlayer.currentWeapons.accuracy);
             if (didMiss == true){
 
@@ -51,7 +51,7 @@ public class TestDriver {
             return didMiss;
         }
     
-    public static void playerChoice(int x,int y,Player player){
+    public static void playerChoice(int x,int y,oldPlayer player){
 
         Scanner Input = new Scanner(System.in);
         System.out.print("What would you like to do?" );
@@ -81,7 +81,7 @@ public class TestDriver {
         }
     }
 
-    public void gameStart(Player PlayerOne){
+    public void gameStart(oldPlayer PlayerOne){
         Scanner Input = new Scanner(System.in);
     
         System.out.printf("Welcome to [game title]%nDazed and with a dry sandy mouth you awaken on a cold empty beach with only your wits about you.%n The shore travels on North where you think you can see a bustling port town%nYou begin to recollect your faded memories.% Your name was: ");
@@ -93,14 +93,14 @@ public class TestDriver {
         public static void main(String[] args) {
             
             //Creating our player character object and giving it a weapon and HP
-            Player PlayerOne = new Player();
+            oldPlayer PlayerOne = new oldPlayer();
             PlayerOne.currentWeapons =  new Weapons_Dagger();
             PlayerOne.setHP(100);
             //change this a
             PlayerOne.setPlayerName("Huxton"); 
         
             //Creating an enemy object using the player class
-            Player Pirate = new Player();
+            oldPlayer Pirate = new oldPlayer();
             Pirate.currentWeapon = new Weapon_Axe();
             Pirate.setHP(50);
             Pirate.setPlayerName("Blackbeard");
