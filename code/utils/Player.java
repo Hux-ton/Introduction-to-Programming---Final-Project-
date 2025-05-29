@@ -4,7 +4,7 @@ import data.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+public class Player{
     //initalizing our 
     private String playerName;
     private int HP;

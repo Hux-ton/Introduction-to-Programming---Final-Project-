@@ -4,31 +4,35 @@ import utils.*;
 
 public class Map {
 
-    private String title;
-    private String script;
     public static int X;
     public static int Y;
+    public static String names[][];
+    public static String descs[][];
     
-    public Map(String title, String script){
+    public Map(int X,int Y){
 
-        this.title = title;
-        this.script = script;
-        this.X = X;
-        this.Y = Y;
+        String names[][] = null;
+        String descs[][] = null;
+        Boolean requiresBoat[][] = null;
+        Boolean requiresSpyGlass[][] = null;
+
+        names[0][0] = "Home";
+        descs[0][0] = "nothing here";
+        requiresBoat[0][0] = false;
+        requiresSpyGlass[0][0]=false;
+
+        names[1][0] ="Not home";
+        descs[1][0] = "nothing here";
 
     }
 
-    public void Cove(){
-        title = "Cove";
-        script = "Help me";
-        X = 0;
-        Y = 0;
+    public static String getName(int newX, int newY) {
+        return names[newX][newY];
     }
 
     public static boolean needsBoat(int newX, int newY) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'needsBoat'");
     }
-    
 
 }

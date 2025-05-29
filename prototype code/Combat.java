@@ -2,7 +2,7 @@ import java.util.Random;
 
 public class Combat {
 
-    public void damage(Player DefPlayer,Player AttPlayer){
+    public void damage(oldPlayer DefPlayer,oldPlayer AttPlayer){
         
         if (Miss(AttPlayer.currentWeapons.accuracy) == true){
             System.out.printf("You missed");
@@ -22,7 +22,7 @@ public class Combat {
         }
     }
 
-    public void heal(Player NewPlayer){
+    public void heal(oldPlayer NewPlayer){
         //put here check if the health potion counter in the inventory is empty
         Random rand =  new Random();
         int heal = rand.nextInt(30,40);
@@ -33,7 +33,7 @@ public class Combat {
         
     }
 
-    public int NewHP(Player NewPlayer){
+    public int NewHP(oldPlayer NewPlayer){
         return NewPlayer.getHP();
     }
     

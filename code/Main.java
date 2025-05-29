@@ -7,8 +7,7 @@ public class Main{
     public  static boolean gameRunning =  false;
     public static Player playerOne;
     private static Scanner myInput;
-    private static Map cove;
-    public static String locations[][];
+
 
     //
     private static void gameStart(){
@@ -19,7 +18,7 @@ public class Main{
 
         //text block with game intro
         System.out.println("""
-                           ================= Welcome to the Krakens Curse =================\r
+                           ============= Welcome to the Treasure in the Deep =============\r
                            \r
                            Whilst on a journey to find The Hidden Treasure of Pirates Past, \r
                            a storm shipwrecks your vessel into jagged rocks, and you are \r
@@ -42,7 +41,7 @@ public class Main{
         //assigning weapon choice to null so we can enter our input check loop
         String weaponChoice=null;
 
-        //ensure the user picks one of our 2 inputs and look the request until its fufilled correctly
+        //ensure the user picks one of our 2 inputs and look the request until its fulfilled correctly
         while (!"D".equalsIgnoreCase(weaponChoice) && !"F".equalsIgnoreCase(weaponChoice)){ 
             System.out.println("An unreliable and rusty [F]lintlock or a dull but sturdy [D]agger: ");
             weaponChoice = myInput.next();
@@ -71,14 +70,13 @@ public class Main{
 
     public static void main(String[] args){
 
-
         gameStart();
     
         while (gameRunning) { 
                 
             System.out.println("Games on");
             MapManager mapManager = new MapManager(playerOne);
-           
+            mapManager.start();
             
 
             break;
