@@ -4,7 +4,7 @@ import utils.*;
 
 public class Main{ 
     //initializing the variables we will use throughout the code
-    public  static boolean gameRunning =  false;
+    public static boolean gameRunning =  false;
     public static Player playerOne;
     private static Scanner myInput;
 

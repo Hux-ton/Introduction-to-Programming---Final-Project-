@@ -1,6 +1,7 @@
 package utils;
 
 import data.*;
+import java.util.Random;
 import java.util.Scanner;
 public class MapManager {
     private Player player;
@@ -110,7 +111,7 @@ public class MapManager {
         //(2,4) Entering cave + boat removal and spyglass check
         if (newX == 2 && newY == 4){
             if (player.containsItem(new Item("SpyGlass"))) {
-                
+                System.out.println("");
             }
             player.removeItem("Boat");
             return;
@@ -134,26 +135,72 @@ public class MapManager {
         
         // (1,4)Communicate with pirate ships and merchant ships
         if (newX == 1 && newY == 4) {
-            System.out.println("You encountered two ships:1) Pirate Ship  2) Merchant Ship");
-            String choice = scanner.nextLine().trim();
+            System.out.println("You have been thrust into battle with a gang of pirates stalking this merchant vessle.\nYou walk the gangplank and board their ship through the fire of cannon balls and are met with a challenger");
+            
+            Player deckHand = new Player();
+            deckHand.setHP(30);
+            deckHand.setPlayerName("Deck Hand");
+            deckHand.currentWeapon = new WeaponDagger();
 
-            if (choice.equals("1")) {
-                if (player.hasItem("Boat")) {
-                    player.removeItem("Boat");//When select 1, the ship will be automatically cleared
-                    System.out.println("Pirates took your ship and you were thrown into the sea and drowned.");
-                    newX = 0; //back to start point
-                    newY = 0;
+            while(deckHand.getHP()>=0){
+                String input = null;
+                while (!"A".equalsIgnoreCase(input) && !"H".equalsIgnoreCase(input) ){
+                    System.out.printf("What will you do? %n [A]ttack or [H]eal : ");
+                    input = scanner.next();
+        
                 }
-            } else if (choice.equals("2")) {
-                if (!player.hasItem("Key")) {
-                    player.addItem(new Item("Key"));
-                    System.out.println("Merchant: The key can help you");
-                } else {
-                    System.out.println("Merchant: You already have the key");
+                switch(input.toUpperCase()){
+                    case "A":
+                        System.out.println("Attacking");
+                        //Call damage method
+                        damage(player,deckHand);
+                        break;
+
+                    case "H":
+                        System.out.println("Healing");
+                        //Call Healing method
+                        heal(player);
+                        break;
                 }
-            } else {
-                System.out.println("enter 1 or 2");
-                return;
+                damage(deckHand,player);
+                if(player.getHP()>=0){
+                    System.out.println("you have died whilst in combat");
+                    System.exit(0);;
+                }
+            }
+
+            System.out.println("You defeated the deckHand but just before you could catch your breath");
+
+            Player pirateCaptain = new Player();
+            pirateCaptain.setHP(50);
+            pirateCaptain.setPlayerName("Pirate Captain");
+            pirateCaptain.currentWeapon = new WeaponCutlass();
+
+            while(pirateCaptain.getHP()>=0){
+                String input = null;
+                while (!"A".equalsIgnoreCase(input) && !"H".equalsIgnoreCase(input) ){
+                    System.out.printf("What will you do? %n [A]ttack or [H]eal : ");
+                    input = scanner.next();
+        
+                }
+                switch(input.toUpperCase()){
+                    case "A":
+                        System.out.println("Attacking");
+                        //Call damage method
+                        damage(player,pirateCaptain);
+                        break;
+
+                    case "H":
+                        System.out.println("Healing");
+                        //Call Healing method
+                        heal(player);
+                        break;
+                }
+                damage(pirateCaptain,player);
+                if(player.getHP()>=0){
+                    System.out.println("you have died whilst in combat");
+                    System.exit(0);;
+                }
             }
         }
 
@@ -165,6 +212,53 @@ public class MapManager {
         System.out.println("Now position: (" + newX + "," + newY + ") " + Map.getName(newX, newY));
         System.out.println(Map.getDescs(newX, newY));
     }
+    public static void damage(Player AttackingPlayer, Player DefendingPlayer){
+            Boolean didMiss = Miss(AttackingPlayer.currentWeapon.accuracy);
+            if (didMiss == true){
+
+                System.out.println("You missed");
+
+            }
+            else{
+    
+                Random rand =  new Random();
+                int damage = rand.nextInt(AttackingPlayer.currentWeapon.damageMin,AttackingPlayer.currentWeapon.damageMax);
+                DefendingPlayer.damageHP(damage);
+            
+                int currentHP = DefendingPlayer.getHP();
+                String name = DefendingPlayer.getPlayerName();
+                System.out.printf(" %s %s their %s and dealt %d damage to %s%n",AttackingPlayer.getPlayerName(),AttackingPlayer.currentWeapon.verb,AttackingPlayer.currentWeapon.name, damage,name);
+            
+                System.out.println(currentHP + " HP");
+    
+            }
+    }
+    public static boolean Miss(int accuracy){
+    
+        boolean didMiss = false;        
+        //Miss chance random object.
+        Random rand =  new Random();
+        int missChance = rand.nextInt(1,accuracy);
+        
+        //Tell out boolean if the miss is true or false
+        if (missChance == 1){
+    
+            didMiss = true;
+        
+        }
+        //return the value of the miss
+        return didMiss;
+    }
+    public static void heal(Player NewPlayer){
+            //put here check if the health potion counter in the inventory is empty
+            Random rand =  new Random();
+            int heal = rand.nextInt(0,10);
+            NewPlayer.restoreHP(heal);
+            int currentHP = NewPlayer.getHP();
+    
+            System.out.println("You healed yourself for "+heal+" HP. your new HP is:"+currentHP);
+            
+    }
     private void handleInv(){
 
         player.showInventory();
@@ -173,7 +267,7 @@ public class MapManager {
             while (true){ 
                 System.out.println("What Item would you like to use: ");
                 choice = scanner.nextLine();
-                if (choice.contains("shovel")||choice.contains("shovel")){
+                if (choice.contains("shovel")||choice.contains("amulet") ||choice.contains("diving gear")||choice.contains("tankard")||choice.contains("spyglass")){
                     break;
                 }
             }
