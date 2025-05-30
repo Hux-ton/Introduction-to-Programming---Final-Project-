@@ -6,6 +6,8 @@ import java.util.Scanner;
 public class MapManager {
     private Player player;
     private Scanner scanner;
+    private boolean tankardCheck = false;
+    public boolean done =false;
 
     public MapManager(Player player) {
         this.player = player;
@@ -108,19 +110,26 @@ public class MapManager {
             return;
         }
 
-        //(2,4) Entering cave + boat removal and spyglass check
-        if (newX == 2 && newY == 4){
-            if (player.containsItem(new Item("SpyGlass"))) {
-                System.out.println("");
+        //(4,2) Entering cave + boat removal and spyglass check
+        if (newX == 4 && newY == 2){
+            if (player.hasItem("SpyGlass")) {
+                System.out.println("""
+                                   You place the Spyglass into the hole in the wall, and as you push the Spyglass in the door slowly opens with a spring mechanism. \r
+                                   \r
+                                   After opening the door enough, you dart through the opening. However, the door shuts loudly behind you, preventing you from going back.""" //
+                //
+                );
+                player.removeItem("Boat");
+            } else {
+                System.out.println("Trying finding a treasure to access this cave");
+                return;
             }
-            player.removeItem("Boat");
-            return;
-
+            
         }
 
         //Detect whether the player has a boat, otherwise cannot enter the cave
         if (Map.needsSpyGlass(newX, newY) && player.hasItem("Boat")){
-            if (newX == 2 && newY == 3) {
+            if (player.getX() == 3 && player.getY() == 2) {
                 return;
             }else if (newY==3){
                 System.out.println("""
@@ -132,16 +141,20 @@ public class MapManager {
 
         }
 
-        
         // (1,4)Communicate with pirate ships and merchant ships
         if (newX == 1 && newY == 4) {
+
             System.out.println("You have been thrust into battle with a gang of pirates stalking this merchant vessle.\nYou walk the gangplank and board their ship through the fire of cannon balls and are met with a challenger");
+            
             
             Player deckHand = new Player();
             deckHand.setHP(30);
             deckHand.setPlayerName("Deck Hand");
             deckHand.currentWeapon = new WeaponDagger();
-
+            if (done){
+                System.out.println("already fought the pirates");
+                return;
+            }
             while(deckHand.getHP()>=0){
                 String input = null;
                 while (!"A".equalsIgnoreCase(input) && !"H".equalsIgnoreCase(input) ){
@@ -169,7 +182,7 @@ public class MapManager {
                 }
             }
 
-            System.out.println("You defeated the deckHand but just before you could catch your breath");
+            System.out.println("You defeated the Deck Hand but just before you could catch your breath another challenger approaches");
 
             Player pirateCaptain = new Player();
             pirateCaptain.setHP(50);
@@ -199,12 +212,72 @@ public class MapManager {
                 damage(pirateCaptain,player);
                 if(player.getHP()>=0){
                     System.out.println("you have died whilst in combat");
-                    System.exit(0);;
+                    System.exit(0);
                 }
             }
+            done =true;
+            System.out.println("Merchant: Thank you for saving me here take this and maybe you can find a sunken treasure");
+            System.out.println("You got the diving gear");
+            System.out.println("Merchant: Also why dont you pickup one of that captains Cutlass while you are here its better than that " + player.currentWeapon.name );
+            player.currentWeapon = new WeaponCutlass();
+            player.addItem(new Item("Diving Gear"));
+
         }
 
+        //getting tankard
+        if (newX == 4 && newY == 3) {
+            if(!player.hasItem("Tankard")){
+                player.addItem(new Item("Tankard"));
+                System.out.println("You recieved the tankard");
+            }
 
+        }
+
+        if (newX == 4 && newY == 4){
+
+            if (!tankardCheck){
+                System.out.println("There must be some kind of secret in here to open this doorway");
+                return;
+            }else{
+
+            Player boss = new Player();
+            boss.setHP(150);
+            boss.setPlayerName("The Kraken");
+            boss.currentWeapon = new WeaponTentacle();
+
+            while(boss.getHP()>=0){
+                String input = null;
+                while (!"A".equalsIgnoreCase(input) && !"H".equalsIgnoreCase(input) ){
+                    System.out.printf("What will you do? %n [A]ttack or [H]eal : ");
+                    input = scanner.next();
+        
+                }
+                switch(input.toUpperCase()){
+                    case "A":
+                        System.out.println("you're now Attacking");
+                        //Call damage method
+                        damage(player,boss);
+                        break;
+
+                    case "H":
+                        System.out.println("you are now Healing");
+                        //Call Healing method
+                        heal(player);
+                        break;
+                }
+                damage(boss,player);
+                if(player.getHP()>=0){
+                    System.out.println("You are grabbed by the kraken, it throws you into the far West wall, and you land in a pile of skeletons, you die… GAME OVER");
+                    System.exit(0);
+                }
+            }
+            System.out.println("Now that the kraken has been defeated, you are free to take as much gold as you wish. If only you could find a way out. \r\n" + //
+                                "\r\n" + //
+                                "THE END ");
+            System.exit(0);
+
+            }
+        }
 
         //Calculating the player's position
         player.setX(newX);
@@ -310,29 +383,49 @@ public class MapManager {
                     break;
 
                 case "diving gear":
-                    System.out.println("""
+                    if (player.getX() == 2 && player.getY() == 0){
+
+                        System.out.println("""
+                                           You dive under the water and swim down to the sunken ship. As you look through the rubble you find something. \r
+                                           \r
+                                           Old Spyglass was added to inventory.\u201d  """ //
+                        //
+                        );
+                        player.addItem(new Item("SpyGlass"));
+                    
+                    } else if (Map.needsBoat(player.getX(),player.getY())){
+
+                        System.out.println("you dive down into the depths but come up empty handed");
+
+                    } else {
+                        System.out.println("""
                                    A heavy lead helmet attached to a thin tube below on top of the\r
-                                   head. The weight should help you sink to find treasure.""" //
-            );
+                                   head. The weight should help you sink to find treasure.""");
+                    }
                     break;
 
                 case "tankard":
-                    System.out.println("""
-                                   A silver dented and scratched mug that probably used by it's\r
-                                   last owner to serve his grog.""" //
-            );
+                    if(player.getX()== 3 && player.getY()== 3){
+                        System.out.println("You pour the water from the tankard onto the torch, and you hear a loud scraping. As much as you look around, you cannot see anything that has changed.");
+                        tankardCheck = true;
+                    }else if (tankardCheck) {
+                            System.out.println("A silver dented and scratched mug it's no longer full." );
+                        
+                    }else{
+                        System.out.println("""
+                                   A silver dented and scratched mug it's\r
+                                   still filled with water surprisingly.""" );
+                    }
                     break;
 
                 case "spyglass":
+                    
                     System.out.println("""
                                    You put your eye up to the spyglass and look out over the sea.\r
                                    As if with a mind of its own, it seems to want to linger its \r
                                    sights upon the cave to the east.""" //
             //
             );
-                    break;
-                case "used spyglass":
-                    System.out.println("the spyglass is now broken");
                     break;
             }
             System.out.println("You put away your " + choice);

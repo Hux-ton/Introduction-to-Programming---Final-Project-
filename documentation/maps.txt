@@ -1,7 +1,0 @@
-    
-    //general water text
-    
-    //if x or y is greater than or equal to 5 
-        //display text no go
-    //else
-        //
