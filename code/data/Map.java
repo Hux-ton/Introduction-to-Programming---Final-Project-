@@ -15,10 +15,6 @@ public class Map {
     }
 
     public static void initalizeMaps() {
-        String names[][] = null;
-        String descs[][] = null;
-        Boolean requiresBoat[][] = null;
-        Boolean requiresSpyGlass[][] = null;
 
         names[0][0] = "======================= Shipwreck Shores =======================";
         descs[0][0] = """
