@@ -209,7 +209,7 @@ public class MapManager {
         //Calculating the player's position
         player.setX(newX);
         player.setY(newY);
-        System.out.println("Now position: (" + newX + "," + newY + ") " + Map.getName(newX, newY));
+        System.out.println("Now position: (" + newX + "," + newY + ") \n" + Map.getName(newX, newY));
         System.out.println(Map.getDescs(newX, newY));
     }
     public static void damage(Player AttackingPlayer, Player DefendingPlayer){
